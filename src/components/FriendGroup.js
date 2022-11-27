@@ -48,7 +48,7 @@ const FriendGroup = () => {
   };
 
   return (
-    <div>
+    <div className="overflow-scroll">
       <input
         type="text"
         placeholder="Add Group"

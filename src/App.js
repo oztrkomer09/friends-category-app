@@ -11,7 +11,7 @@ function App() {
       <div className="bg-gray-200">
         <div className="flex justify-between p-4 h-screen">
           <FriendList />
-          <h1 className="flex text-center bg-red-800 h-11 items-center px-2 text-4xl text-white rounded gap-x-2">
+          <h1 className="flex text-center bg-red-800 h-11 items-center px-2 text-2xl text-white rounded gap-x-2">
             <BsFillStarFill />
             FRIEND CATEGORIZER APP
             <BsFillStarFill />
