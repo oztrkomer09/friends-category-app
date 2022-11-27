@@ -9,13 +9,15 @@ export const UserProvider = ({ children }) => {
   const [key, setKey] = useState("");
   const [group, setGroup] = useState([]);
   const [name, setName] = useState("");
-  const [members, setMembers] = useState("");
 
   useEffect(() => {
-    db.collection("friends").onSnapshot((snapshot) => {
-      setList(snapshot.docs.map((doc) => doc.data().member));
-    });
-    db.collection("friendGroups").onSnapshot((snapshot) => {
+    db.collection("friends")
+      .orderBy("member", "asc")
+      .onSnapshot((snapshot) => {
+        setList(snapshot.docs.map((doc) => doc.data().member));
+      });
+    db.collection("friendGroups")
+    .onSnapshot((snapshot) => {
       setGroup(snapshot.docs.map((doc) => doc.data().group));
     });
   }, []);
@@ -36,8 +38,6 @@ export const UserProvider = ({ children }) => {
     list,
     key,
     toggleMenu,
-    members,
-    setMembers,
   };
   return <MainContext.Provider value={data}>{children}</MainContext.Provider>;
 };

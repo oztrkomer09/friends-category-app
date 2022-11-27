@@ -1,13 +1,13 @@
 import { BsFillTrashFill } from "react-icons/bs";
 import { useFriendsList } from "../MainContext";
 import db from "../firebase";
-import { doc, deleteDoc } from "firebase/firestore";
+import { doc, deleteDoc, setDoc } from "firebase/firestore";
 
 const FriendGroup = () => {
   const { group, setGroup, name, setName } = useFriendsList();
 
   const handleChange = (e) => {
-    setName(e.target.value);
+    setName(e.target.value.toLowerCase());
   };
 
   const addGroup = () => {
@@ -21,6 +21,7 @@ const FriendGroup = () => {
             name: name,
             items: [],
           },
+          letter: name[0].toUpperCase(),
         });
     }
     setGroup([...group]);
@@ -31,10 +32,16 @@ const FriendGroup = () => {
     deleteDoc(doc(db, "friendGroups", groupName));
   };
 
-  const deleteMember = (index, groupName) => {
+  const deleteMember = (item, groupName) => {
     group.forEach((group) => {
       if (group.name === groupName) {
-        group.items.splice(index, 1);
+        var filteredArray = group.items.filter((e) => e !== item);
+        setDoc(doc(db, "friendGroups", groupName), {
+          group: {
+            name: groupName,
+            items: [...filteredArray],
+          },
+        });
       }
     });
     setGroup([...group]);
@@ -61,7 +68,7 @@ const FriendGroup = () => {
         return (
           <ul
             key={group.name}
-            className="text-bold bg-green-200 border flex flex-col gap-y-3 mb-3 relative rounded"
+            className="text-bold bg-green-200 border flex flex-col gap-y-3 mt-3 relative rounded"
           >
             <h2 className="text-center font-bold underline capitalize text-lg">
               {group.name === "Select an Option" ? "" : group.name}
@@ -90,7 +97,7 @@ const FriendGroup = () => {
                     {index + 1} - {item}
                   </li>
                   <button
-                    onClick={() => deleteMember(index, group.name)}
+                    onClick={() => deleteMember(item, group.name)}
                     className="hidden group-hover:block hover:scale-125 hover:font-extrabold hover:text-red-700"
                   >
                     X
